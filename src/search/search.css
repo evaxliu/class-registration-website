@@ -1,0 +1,48 @@
+/*
+  Name: Eva Liu
+  Date: November 4th, 2023
+  Section: CSE 154 AB Donovan Jordan Kong
+
+  Hello, this is a CSS page which styles
+  search.html. This will style the header,
+  the list of classes and the search bar.
+*/
+
+h1 {
+  text-align: center;
+  margin: 30px;
+}
+
+body {
+  background-color: rgb(154, 129, 181);
+}
+
+input {
+  width: 85%;
+  padding: 10px;
+}
+
+button {
+  border: transparent;
+  background-color: transparent;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+ul a {
+  display: inline-block;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+  padding: 5px;
+}
+
+ul button {
+  margin: 10px;
+}

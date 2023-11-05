@@ -1,3 +1,14 @@
+/*
+  Name: Eva Liu
+  Date: November 4th, 2023
+  Section: CSE 154 AB Donovan Jordan Kong
+
+  Hello, this is a CSS page which styles login.html.
+  This CSS page will style the header, text input
+  for username and password and the login
+  button.
+*/
+
 h1 {
   text-align: center;
   text-transform: capitalize;

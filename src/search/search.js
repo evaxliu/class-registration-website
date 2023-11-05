@@ -21,11 +21,16 @@
   function init() {
     let searchBar = document.getElementById("search");
 
-    // searchBar.addEventListener("click", checkUserPass);
+    searchBar.addEventListener("click", showFilteredItems);
   }
 
-  // function showFilteredItems () {
+  /**
+   * Shows filtered items after user
+   * inputs text to search for in the
+   * search bar
+   */
+  function showFilteredItems() {
     // Show filtered items after user searches
-    
-  // }
+
+  }
 })();

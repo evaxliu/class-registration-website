@@ -24,12 +24,22 @@
     pIncorrect.addEventListener("click", checkUserPass);
   }
 
-  function checkUserPass () {
-    const form = document.getElementById("form")
-    const username = form.user.value;
-    const password = form.pass.value;
+  /**
+   * Handles checking if the username
+   * and password is valid, if it isnt
+   * then, we will show pIncorrect below
+   * the sign in button.
+   */
+  function checkUserPass() {
+    // const form = document.getElementById("form");
 
-    // check if username and password is incorrect
-    // if true, show pIncorrect using css class
+    // const username = form.user.value;
+
+    // const password = form.pass.value;
+
+    /**
+     * check if username and password is incorrect
+     * if true, show pIncorrect using css class
+     */
   }
 })();

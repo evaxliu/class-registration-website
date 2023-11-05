@@ -4,7 +4,7 @@
  * Section: CSE 154 AB
  *
  * This is the JS to implement the UI experience for
- * the previous class seen for the class 
+ * the previous class seen for the class
  * registration website.
  */
 
@@ -21,10 +21,18 @@
    */
   function init() {
     // Initialize Class Buttons
+    showClassDescription();
   }
 
-  function showClassDescription () {
-    // Show class description after clicking
-    // on a class button
+  /**
+   * Shows description of class after
+   * clicking on a specific class
+   * in a list.
+   */
+  function showClassDescription() {
+    /**
+     * Show class description after clicking
+     * on a class button
+     */
   }
 })();

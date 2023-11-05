@@ -1,0 +1,74 @@
+/*
+  Name: Eva Liu
+  Date: November 4th, 2023
+  Section: CSE 154 AB Donovan Jordan Kong
+
+  Hello, this is a CSS page which styles login.html.
+  This CSS page will style the header, text input
+  for username and password and the login
+  button.
+*/
+
+h1 {
+  text-align: center;
+  text-transform: capitalize;
+  color: rgb(172, 149, 192);
+}
+
+/* source of image: https://unsplash.com/photos/blue-to-purple-gradient-eICUFSeirc0 */
+body {
+  background-image: url("../../img/luke-chesser-eICUFSeirc0-unsplash.png");
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+form {
+  padding: 15px;
+}
+
+form, button {
+  color: white;
+}
+
+input {
+  margin: 10px;
+  padding: 5px;
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+}
+
+button {
+  background-color: rgb(172, 149, 192);
+  border: transparent;
+  padding: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+p {
+  color: red;
+  visibility: hidden;
+}
+
+.password-visible {
+  visibility: visible;
+}
+
+.password-hidden {
+  visibility: hidden;
+}

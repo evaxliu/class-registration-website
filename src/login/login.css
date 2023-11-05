@@ -48,3 +48,16 @@ button {
 button:hover {
   cursor: pointer;
 }
+
+p {
+  color: red;
+  visibility: hidden;
+}
+
+.password-visible {
+  visibility: visible;
+}
+
+.password-hidden {
+  visibility: hidden;
+}

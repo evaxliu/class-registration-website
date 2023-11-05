@@ -1,0 +1,44 @@
+/*
+  Name: Eva Liu
+  Date: November 4th, 2023
+  Section: CSE 154 AB Donovan Jordan Kong
+
+  Hello, this is a CSS page which styles index.html.
+  This CSS page will style the header, body and
+  button to move to the login page.
+*/
+
+h1 {
+  text-align: center;
+  text-transform: capitalize;
+  color: rgb(172, 149, 192);
+}
+
+/* source of image: https://unsplash.com/photos/blue-to-purple-gradient-eICUFSeirc0 */
+body {
+  background-image: url("../img/luke-chesser-eICUFSeirc0-unsplash.png");
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+a {
+  background-color: rgb(172, 149, 192);
+  border: transparent;
+  padding: 10px;
+}
+
+a:hover {
+  cursor: pointer;
+}

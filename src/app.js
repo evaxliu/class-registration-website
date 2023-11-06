@@ -10,5 +10,5 @@
 "use strict";
 
 (function() {
-  window.addEventListener("load", init);
+  // window.addEventListener("load", init);
 })();

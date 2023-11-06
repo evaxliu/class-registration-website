@@ -5,19 +5,28 @@ header {
 
 .sign-in-btn {
   position: absolute;
+}
+
+.sign-in-btn, .filter-btn,
+.sort-btn {
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
   padding: 8px 16px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   text-decoration: none;
   border-radius: 4px;
-  cursor: pointer;
   border: none;
 }
 
-.sign-in-btn:hover {
+.sign-in-btn, .filter-btn,
+.sort-btn, .tile {
+  cursor: pointer;
+}
+
+.sign-in-btn:hover, .filter-btn:hover,
+.sort-btn:hover {
   background-color: #45a049;
 }
 
@@ -27,13 +36,11 @@ header {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: auto;
   margin-top: 20px;
-  padding: 20px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: transform 0.2s ease-in-out;
-  cursor: pointer;
 }
 
 .tile:hover {
@@ -48,7 +55,7 @@ header {
   font-size: 24px;
 }
 
-.two-btns {
+.two-btns, .tile {
   padding: 20px;
 }
 
@@ -60,21 +67,7 @@ header {
   float: right;
 }
 
-.filter-btn, .sort-btn {
+.filter-btn,
+.sort-btn {
   display: block;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  padding: 8px 16px;
-  background-color: #4CAF50;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-  cursor: pointer;
-  border-color: #4CAF50;
-  border: none;
-}
-
-.filter-btn:hover , .sort-btn:hover{
-  background-color: #45a049;
 }

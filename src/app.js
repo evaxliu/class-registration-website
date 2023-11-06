@@ -17,4 +17,5 @@ app.get('/posts', function(req, res) {
   res.type("text").send("Hello World");
 });
 
-app.listen(NUMBER);
+const PORT = process.env.PORT || NUMBER;
+app.listen(PORT);

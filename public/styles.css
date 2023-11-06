@@ -7,7 +7,8 @@ header {
   position: absolute;
 }
 
-.sign-in-btn, .filter-btn,
+.sign-in-btn,
+.filter-btn,
 .sort-btn {
   top: 50%;
   right: 10px;
@@ -20,12 +21,15 @@ header {
   border: none;
 }
 
-.sign-in-btn, .filter-btn,
-.sort-btn, .tile {
+.sign-in-btn,
+.filter-btn,
+.sort-btn,
+.tile {
   cursor: pointer;
 }
 
-.sign-in-btn:hover, .filter-btn:hover,
+.sign-in-btn:hover,
+.filter-btn:hover,
 .sort-btn:hover {
   background-color: #45a049;
 }

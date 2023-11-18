@@ -132,7 +132,7 @@ Student successfully enrolled in the class.
 404 Not Found: User not found.
 ```
 
-## Search for Class
+## Search for Classes
 **Request Format:** GET with params
 
 **Request Type:** GET

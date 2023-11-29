@@ -16,7 +16,7 @@ h1 {
 
 /* source of image: https://unsplash.com/photos/blue-to-purple-gradient-eICUFSeirc0 */
 body {
-  background-image: url("../img/luke-chesser-eICUFSeirc0-unsplash.png");
+  background-image: url("./img/luke-chesser-eICUFSeirc0-unsplash.png");
   background-attachment: fixed;
   background-size: cover;
   height: 100vh;

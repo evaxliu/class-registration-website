@@ -116,8 +116,9 @@ app.post('/api/login', async (req, res) => {
       if (user.length === 0) {
         let error = 401;
         res.status(error).send('User has input incorrect email or password.');
+      } else {
+        res.type("text").send("Student has successfully logged in.");
       }
-      res.type("text").send("Student has successfully logged in.");
     }
   } catch (error) {
     handleServerError(res);

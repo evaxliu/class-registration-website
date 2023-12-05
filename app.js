@@ -72,7 +72,7 @@ const handleServerError = (res) => {
 // Register Student
 app.post('/api/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {email, password} = req.body;
     let userExists;
 
     if (!email || !password) {
@@ -83,12 +83,13 @@ app.post('/api/register', async (req, res) => {
       userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
 
       if (userExists.length > 0) {
-        handleConflictWithState(res, 'Student has already registered with the provided email.');
+        let error = 409;
+        res.status(error).send('Student has already registered with the provided email.');
       } else {
         await db.run('INSERT INTO Students (email, passw) VALUES (?, ?)', email, password);
 
         await db.close();
-  
+
         res.type("text").send("Student has successfully registered.");
       }
     }
@@ -100,7 +101,7 @@ app.post('/api/register', async (req, res) => {
 // Login Student
 app.post('/api/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {email, password} = req.body;
     let user;
 
     if (!email || !password) {
@@ -113,7 +114,8 @@ app.post('/api/login', async (req, res) => {
       await db.close();
 
       if (user.length === 0) {
-        res.status(401).send('User has input incorrect email or password.');
+        let error = 401;
+        res.status(error).send('User has input incorrect email or password.');
       }
       res.type("text").send("Student has successfully logged in.");
     }
@@ -146,11 +148,11 @@ app.get('/api/classes', async (req, res) => {
 // Search for Classes
 app.get('/api/search/classes', async (req, res) => {
   try {
-    const { name } = req.query;
+    const {name} = req.query;
     let classes;
 
     if (!name) {
-      handleMissingParams(res, 'Missing one or more required params.')
+      handleMissingParams(res, 'Missing one or more required params.');
     } else {
       let db = await getDBConnection();
 
@@ -173,17 +175,17 @@ app.get('/api/search/classes', async (req, res) => {
 // Filter Classes
 app.get('/api/filter/classes', async (req, res) => {
   try {
-    const { major } = req.query;
+    const {major} = req.query;
 
     if (!major) {
-      handleMissingParams(res, 'Missing one or more required params.')
+      handleMissingParams(res, 'Missing one or more required params.');
     } else {
       let db = await getDBConnection();
 
       let classes = await db.all('SELECT * FROM Classes WHERE major = ?', major);
-  
+
       await db.close();
-  
+
       if (classes.length === 0) {
         handleDoesNotExist(res, 'No classes found.');
       } else {
@@ -200,7 +202,7 @@ app.get('/api/filter/classes', async (req, res) => {
 app.get('api/bulkEnrollment/:studentId', async (req, res) => {
   try {
     const studentId = req.params.studentId;
-    
+
     let db = await getDBConnection();
 
     let bulkClasses = db.all(`SELECT Classes.class_id, class_name, major, instructor_name, capacity
@@ -229,7 +231,8 @@ app.get('/api/enroll/:studentId', async (req, res) => {
 
     let db = await getDBConnection();
 
-    enrolledClasses = await db.all(`SELECT Classes.class_id, class_name, major, instructor_name, capacity
+    enrolledClasses = await db.all(`SELECT Classes.class_id, 
+    class_name, major, instructor_name, capacity
     FROM PrevTransactions
     INNER JOIN Classes ON PrevTransactions.class_id = Classes.class_id
     WHERE PrevTransactions.student_id = ?;`, studentId);

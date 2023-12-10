@@ -38,7 +38,7 @@ async function getDBConnection() {
   });
 
   return db;
-}  
+}
 
 /**
  * Handles response of missing body parameters
@@ -84,7 +84,7 @@ app.post('/api/register', async (req, res) => {
       let userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
 
       if (userExists.length > 0) {
-        let error = 409;
+        const error = 409;
         res.status(error).send('Student has already registered with the provided email.');
       } else {
         await db.run('INSERT INTO Students (email, passw) VALUES (?, ?)', email, password);
@@ -109,12 +109,13 @@ app.post('/api/login', async (req, res) => {
     } else {
       let db = await getDBConnection();
 
-      let findStudent = await db.all('SELECT * FROM Students WHERE email = ? AND passw = ?', email, password);
+      let findStudent = await db.all(`SELECT * FROM Students
+      WHERE email = ? AND passw = ?`, email, password);
 
       await db.close();
 
       if (findStudent.length === 0) {
-        let error = 401;
+        const error = 401;
         res.status(error).send('User has input incorrect email or password.');
       } else {
         res.type("text").send("Student has successfully logged in.");
@@ -213,13 +214,13 @@ app.get('/api/classes/:classId', async (req, res) => {
     await db.close();
 
     if (!classDetails) {
-        handleDoesNotExist(res, 'Class does not exist.');
+      handleDoesNotExist(res, 'Class does not exist.');
     } else {
-        res.type('json');
-        res.send(classDetails);
+      res.type('json');
+      res.send(classDetails);
     }
   } catch (error) {
-      handleServerError(res);
+    handleServerError(res);
   }
 });
 
@@ -253,33 +254,33 @@ app.get('api/bulkEnrollment/:studentId', async (req, res) => {
 // Add class to list of classes ready for bulk enrollment
 app.post('/api/bulkEnrollment/addClass', async (req, res) => {
   try {
-      const {studentId, classId} = req.body;
+    const {studentId, classId} = req.body;
 
-      if (!studentId || !classId) {
-        handleMissingParams(res, 'Missing one or more required params.');
+    if (!studentId || !classId) {
+      handleMissingParams(res, 'Missing one or more required params.');
+    } else {
+      let db = await getDBConnection();
+
+      let existingBulkEnrollment = await db.get(`
+        SELECT *
+        FROM BulkEnrollments
+        WHERE student_id = ? AND class_id = ?
+      `, studentId, classId);
+
+      if (existingBulkEnrollment) {
+        let error = 409;
+        res.status(error).send('Class is already in the bulk enrollment list for the student.');
       } else {
-        let db = await getDBConnection();
-
-        let existingBulkEnrollment = await db.get(`
-            SELECT *
-            FROM BulkEnrollments
-            WHERE student_id = ? AND class_id = ?
+        await db.run(`
+          INSERT INTO BulkEnrollments (student_id, class_id)
+          VALUES (?, ?);
         `, studentId, classId);
-  
-        if (existingBulkEnrollment) {
-          let error = 409;
-          res.status(error).send('Class is already in the bulk enrollment list for the student.');
-        } else {
-          await db.run(`
-            INSERT INTO BulkEnrollments (student_id, class_id)
-            VALUES (?, ?);
-          `, studentId, classId);
 
-          await db.close();
+        await db.close();
 
-          res.type('text').send('Class added to the bulk enrollment list successfully.');
-        }
+        res.type('text').send('Class added to the bulk enrollment list successfully.');
       }
+    }
   } catch (error) {
       handleServerError(res);
   }

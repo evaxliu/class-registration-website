@@ -362,11 +362,12 @@ async function enrollSingleClass(db, studentId, classId, res) {
 }
 
 // Bulk enrollment of multiple classes
-app.post('/api/bulkEnrollment/:studentId', async (req, res) => {
+app.post('/api/bulkEnrollment', async (req, res) => {
   try {
-    const studentId = req.params.studentId;
-    const {isLoggedIn} = req.body;
-    if (!isLoggedIn) {
+    const {studentId, isLoggedIn} = req.body;
+    if (!studentId) {
+      handleMissingParams(res, 'Missing one or more required params.');
+    } else if (!isLoggedIn) {
       handleUserNotLoggedIn(res, "Student is not logged in");
     } else if (isLoggedIn === true) {
       const db = await getDBConnection();

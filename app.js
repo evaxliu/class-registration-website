@@ -268,7 +268,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
       `, studentId, classId);
 
       if (existingBulkEnrollment) {
-        let error = 409;
+        const error = 409;
         res.status(error).send('Class is already in the bulk enrollment list for the student.');
       } else {
         await db.run(`
@@ -282,7 +282,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
       }
     }
   } catch (error) {
-      handleServerError(res);
+    handleServerError(res);
   }
 });
 
@@ -293,7 +293,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
  * @returns {sqlite3.Database} Result of a SQL query
  */
 async function checkClassExists(db, classId) {
-  return await db.get(`
+  return db.get(`
     SELECT capacity, infinite_capacity
     FROM Classes
     WHERE class_id = ?;
@@ -330,7 +330,7 @@ async function updateClasses(db, studentId, classId, classDetails) {
  * @returns {sqlite3.Database} - Results from a database query
  */
 async function checkClassEnrolled(db, studentId, classId) {
-  return await db.get(`
+  return db.get(`
     SELECT *
     FROM PrevTransactions
     WHERE student_id = ? AND class_id = ?;
@@ -343,7 +343,7 @@ async function checkClassEnrolled(db, studentId, classId) {
  * @param {String} studentId - Query input
  * @param {String} classId - Query input
  */
-async function enrollSingleClass(db, studentId, classId) {
+async function enrollSingleClass(db, studentId, classId, res) {
   let classDetails = await db.get(`
     SELECT capacity, infinite_capacity
     FROM Classes
@@ -355,7 +355,7 @@ async function enrollSingleClass(db, studentId, classId) {
 
   const enrollmentExists = await checkClassEnrolled(db, studentId, classId);
   if (enrollmentExists) {
-    let error = 409;
+    const error = 409;
     res.status(error).send('Student is already enrolled in this class.');
   } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
     res.type('text').send('Class is full.');
@@ -385,10 +385,11 @@ app.post('/api/bulkEnrollment/:studentId', async (req, res) => {
         handleDoesNotExist(res, 'No classes added for bulk enrollment.');
       } else {
         for (const classDetails of bulkClasses) {
-          await enrollSingleClass(db, studentId, classDetails.class_id);
+          await enrollSingleClass(db, studentId, classDetails.class_id, res);
         }
         await db.close();
-        res.type('text').send(Math.random().toString(36));
+        const num = 36;
+        res.type('text').send(Math.random().toString(num));
       }
     }
   } catch (error) {
@@ -413,14 +414,15 @@ app.post('/api/classes/enroll', async (req, res) => {
       } else {
         const enrollmentExists = await checkClassEnrolled(db, studentId, classId);
         if (enrollmentExists) {
-          let error = 409;
+          const error = 409;
           res.status(error).send('Student is already enrolled in this class.');
         } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
           res.type('text').send('Class is full.');
         } else {
           await updateClasses(db, studentId, classId, classDetails);
           await db.close();
-          res.type('text').send(Math.random().toString(36));
+          const num = 36;
+          res.type('text').send(Math.random().toString(num));
         }
       }
     }
@@ -474,10 +476,11 @@ app.post('/api/classes/classesTaken', async (req, res) => {
         handleDoesNotExist(res, 'Class does not exist.');
       } else {
         let classId = classDetails[0].class_id;
-        let hasTakenClass = db.all('SELECT * FROM PrevCompletedClasses WHERE student_id = ? AND class_id = ?', studentId, classId);
-        
+        let hasTakenClass = db.all(`SELECT * FROM PrevCompletedClasses
+        WHERE student_id = ? AND class_id = ?`, studentId, classId);
+
         await db.close();
-  
+
         if (hasTakenClass) {
           res.type('text').send('Student meets prereq requirements.');
         } else {

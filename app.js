@@ -68,7 +68,7 @@ const handleDoesNotExist = (res, message) => {
 const handleConflictError = (res, message) => {
   const error = 409;
   res.status(error).json({error: message});
-}
+};
 
 /**
  * Handles response of server error
@@ -301,11 +301,12 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
  * @returns {sqlite3.Database} Result of a SQL query
  */
 async function checkClassExists(db, classId) {
-  return await db.get(`
-    SELECT capacity, infinite_capacity
-    FROM Classes
-    WHERE class_id = ?;
-  `, classId);
+  let checkClass = await db.get(`
+  SELECT capacity, infinite_capacity
+  FROM Classes
+  WHERE class_id = ?;
+`, classId);
+  return checkClass;
 }
 
 /**
@@ -338,11 +339,12 @@ async function updateClasses(db, studentId, classId, classDetails) {
  * @returns {sqlite3.Database} - Results from a database query
  */
 async function checkClassEnrolled(db, studentId, classId) {
-  return await db.get(`
-    SELECT *
-    FROM PrevTransactions
-    WHERE student_id = ? AND class_id = ?;
-  `, studentId, classId);
+  let checkClass = await db.get(`
+  SELECT *
+  FROM PrevTransactions
+  WHERE student_id = ? AND class_id = ?;
+`, studentId, classId);
+  return checkClass;
 }
 
 /**

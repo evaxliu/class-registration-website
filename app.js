@@ -61,6 +61,16 @@ const handleDoesNotExist = (res, message) => {
 };
 
 /**
+ * Handles response of conflict for inputting in db
+ * @param {Response} res - query response
+ * @param {string} message - error msg
+ */
+const handleConflictError = (res, message) => {
+  const error = 409;
+  res.status(error).json({error: message});
+}
+
+/**
  * Handles response of server error
  * @param {Response} res - query response
  * @param {string} message - error msg
@@ -84,8 +94,7 @@ app.post('/api/register', async (req, res) => {
       let userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
 
       if (userExists.length > 0) {
-        const error = 409;
-        res.status(error).send('Student has already registered with the provided email.');
+        handleConflictError(res, 'Student has already registered with the provided email.');
       } else {
         await db.run('INSERT INTO Students (email, passw) VALUES (?, ?)', email, password);
 
@@ -268,8 +277,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
       `, studentId, classId);
 
       if (existingBulkEnrollment) {
-        const error = 409;
-        res.status(error).send('Class is already in the bulk enrollment list for the student.');
+        handleConflictError(res, 'Class is already in the bulk enrollment list for the student.');
       } else {
         await db.run(`
           INSERT INTO BulkEnrollments (student_id, class_id)
@@ -354,10 +362,9 @@ async function enrollSingleClass(db, studentId, classId, res) {
     handleDoesNotExist(res, 'Class does not exist.');
   }
 
-  const enrollmentExists = await checkClassEnrolled(db, studentId, classId);
+  const enrollmentExists = checkClassEnrolled(db, studentId, classId);
   if (enrollmentExists) {
-    const error = 409;
-    res.status(error).send('Student is already enrolled in this class.');
+    handleConflictError(res, 'Student is already enrolled in this class.');
   } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
     res.type('text').send('Class is full.');
   } else {
@@ -408,14 +415,13 @@ app.post('/api/classes/enroll', async (req, res) => {
       res.type('text').send("Student is not logged in");
     } else if (isLoggedIn === true) {
       const db = await getDBConnection();
-      let classDetails = await checkClassExists(db, classId);
+      let classDetails = checkClassExists(db, classId);
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');
       } else {
-        const enrollmentExists = await checkClassEnrolled(db, studentId, classId);
+        const enrollmentExists = checkClassEnrolled(db, studentId, classId);
         if (enrollmentExists) {
-          const error = 409;
-          res.status(error).send('Student is already enrolled in this class.');
+          handleConflictError(res, 'Student is already enrolled in this class.');
         } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
           res.type('text').send('Class is full.');
         } else {

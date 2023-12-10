@@ -47,7 +47,17 @@ async function getDBConnection() {
  */
 const handleMissingParams = (res, message) => {
   const error = 400;
-  res.status(error).json({error: message});
+  res.status(error).type("text").send(message);
+};
+
+/**
+ * Handles response of user not logged in
+ * @param {Response} res - query response
+ * @param {string} message - error msg
+ */
+const handleUserNotLoggedIn = (res, message) => {
+  const error = 401;
+  res.status(error).type("text").send(message);
 };
 
 /**
@@ -57,7 +67,7 @@ const handleMissingParams = (res, message) => {
  */
 const handleDoesNotExist = (res, message) => {
   const error = 404;
-  res.status(error).json({error: message});
+  res.status(error).type("text").send(message);
 };
 
 /**
@@ -67,7 +77,7 @@ const handleDoesNotExist = (res, message) => {
  */
 const handleConflictError = (res, message) => {
   const error = 409;
-  res.status(error).json({error: message});
+  res.status(error).type("text").send(message);
 };
 
 /**
@@ -380,7 +390,7 @@ app.post('/api/bulkEnrollment/:studentId', async (req, res) => {
     const studentId = req.params.studentId;
     const {isLoggedIn} = req.body;
     if (!isLoggedIn) {
-      res.type('text').send("Student is not logged in");
+      handleUserNotLoggedIn(res, "Student is not logged in");
     } else if (isLoggedIn === true) {
       const db = await getDBConnection();
 
@@ -414,7 +424,7 @@ app.post('/api/classes/enroll', async (req, res) => {
     if (!studentId || !classId) {
       handleMissingParams(res, 'Missing one or more required params.');
     } else if (!isLoggedIn) {
-      res.type('text').send("Student is not logged in");
+      handleUserNotLoggedIn(res, "Student is not logged in");
     } else if (isLoggedIn === true) {
       const db = await getDBConnection();
       let classDetails = checkClassExists(db, classId);
@@ -446,7 +456,7 @@ app.post('/api/classes/enrolled', async (req, res) => {
     if (!studentId) {
       handleMissingParams(res, 'Missing one or more required params.');
     } else if (!isLoggedIn) {
-      res.type('text').send("Student is not logged in");
+      handleUserNotLoggedIn(res, "Student is not logged in");
     } else if (isLoggedIn === true) {
       let db = await getDBConnection();
 
@@ -473,9 +483,11 @@ app.post('/api/classes/enrolled', async (req, res) => {
 // Check completed classes of a single student
 app.post('/api/classes/classesTaken', async (req, res) => {
   try {
-    const {studentId, className} = req.body;
+    const {studentId, className, isLoggedIn} = req.body;
     if (!studentId || !className) {
       handleMissingParams(res, 'Missing one or more required params.');
+    } else if (!isLoggedIn) {
+      handleUserNotLoggedIn(res, "Student is not logged in");
     } else {
       let db = await getDBConnection();
 

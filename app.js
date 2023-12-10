@@ -1,9 +1,11 @@
 /*
- * Name: Eva Liu
+ * Name: Eva Liu and Samriddhi Sivakumar
  * Date: December 1st, 2023
  * Section: CSE 154 AB
  *
  * This is the JS to implement the back end
+ * api endpoints to handle multiple features
+ * (e.g. login, enroll in classes and etc.)
  * for our class registration website.
  */
 
@@ -36,7 +38,7 @@ async function getDBConnection() {
   });
 
   return db;
-}
+}  
 
 /**
  * Handles response of missing body parameters
@@ -69,18 +71,17 @@ const handleServerError = (res) => {
     .send("An error occurred on the server. Try again later.");
 };
 
-// Register Student
+// Register student into the class registration website
 app.post('/api/register', async (req, res) => {
   try {
     const {email, password} = req.body;
-    let userExists;
 
     if (!email || !password) {
       handleMissingParams(res, 'Missing one or more required params.');
     } else {
       let db = await getDBConnection();
 
-      userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
+      let userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
 
       if (userExists.length > 0) {
         let error = 409;
@@ -98,18 +99,17 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Login Student
+// Login student
 app.post('/api/login', async (req, res) => {
   try {
     const {email, password} = req.body;
-    let user;
 
     if (!email || !password) {
       handleMissingParams(res, 'Missing one or more required params.');
     } else {
       let db = await getDBConnection();
 
-      user = await db.all('SELECT * FROM Students WHERE email = ? AND passw = ?', email, password);
+      let user = await db.all('SELECT * FROM Students WHERE email = ? AND passw = ?', email, password);
 
       await db.close();
 
@@ -125,13 +125,12 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// List of Available Classes
+// List of available classes
 app.get('/api/classes', async (req, res) => {
   try {
-    let classes;
     let db = await getDBConnection();
 
-    classes = await db.all('SELECT * FROM Classes WHERE capacity > 0');
+    let classes = await db.all('SELECT * FROM Classes WHERE capacity > 0');
 
     await db.close();
 
@@ -146,18 +145,21 @@ app.get('/api/classes', async (req, res) => {
   }
 });
 
-// Search for Classes
+// Search for classes
 app.get('/api/search/classes', async (req, res) => {
   try {
     const {name} = req.query;
-    let classes;
 
     if (!name) {
       handleMissingParams(res, 'Missing one or more required params.');
     } else {
       let db = await getDBConnection();
 
-      classes = await db.all('SELECT * FROM Classes WHERE class_name LIKE ?', name);
+      let classes = await db.all(`
+        SELECT *
+        FROM Classes WHERE class_name 
+        LIKE ? OR major LIKE ? OR instructor_name LIKE ?
+      `, name, name, name);
 
       await db.close();
 
@@ -173,7 +175,7 @@ app.get('/api/search/classes', async (req, res) => {
   }
 });
 
-// Filter Classes
+// Filter classes based on major
 app.get('/api/filter/classes', async (req, res) => {
   try {
     const {major} = req.query;
@@ -199,7 +201,30 @@ app.get('/api/filter/classes', async (req, res) => {
   }
 });
 
-// Get List of Classes Ready for Bulk Enrollment
+// Get more detailed information about one specific class
+app.get('/api/class/:classId', async (req, res) => {
+  try {
+    const classId = req.params.classId;
+
+    let db = await getDBConnection();
+
+    let classDetails = await db.get('SELECT * FROM Classes WHERE class_id = ?', classId);
+
+    await db.close();
+
+    if (!classDetails) {
+        handleDoesNotExist(res, 'Class does not exist.');
+    } else {
+        res.type('json');
+        res.send(classDetails);
+    }
+} catch (error) {
+    handleServerError(res);
+}
+
+});
+
+// Get list of classes ready for bulk enrollment
 app.get('api/bulkEnrollment/:studentId', async (req, res) => {
   try {
     const studentId = req.params.studentId;
@@ -224,27 +249,123 @@ app.get('api/bulkEnrollment/:studentId', async (req, res) => {
   }
 });
 
-// Get Enrolled Classes
-app.get('/api/enroll/:studentId', async (req, res) => {
+// Add class to list of classes ready for bulk enrollment
+app.post('/api/bulkEnroll', async (req, res) => {
   try {
-    const studentId = req.params.studentId;
-    let enrolledClasses;
+      const {studentId, classId} = req.body;
 
-    let db = await getDBConnection();
+      if (!studentId || !classId) {
+        handleMissingParams(res, 'Missing one or more required params.');
+      } else {
+        let db = await getDBConnection();
 
-    enrolledClasses = await db.all(`SELECT Classes.class_id, 
-    class_name, major, instructor_name, capacity
-    FROM PrevTransactions
-    INNER JOIN Classes ON PrevTransactions.class_id = Classes.class_id
-    WHERE PrevTransactions.student_id = ?;`, studentId);
+        let existingBulkEnrollment = await db.get(`
+            SELECT *
+            FROM BulkEnrollments
+            WHERE student_id = ? AND class_id = ?
+        `, studentId, classId);
+  
+        if (existingBulkEnrollment) {
+          let error = 409;
+          res.status(error).send('Class is already in the bulk enrollment list for the student.');
+        } else {
+          await db.run(`
+            INSERT INTO BulkEnrollments (student_id, class_id)
+            VALUES (?, ?);
+          `, studentId, classId);
 
-    await db.close();
+          await db.close();
 
-    if (!enrolledClasses) {
-      handleDoesNotExist(res, 'ID does not exist.');
-    } else {
-      res.type('json');
-      res.send(enrolledClasses);
+          res.type('text').send('Class added to the bulk enrollment list successfully.');
+        }
+      }
+  } catch (error) {
+      handleServerError(res);
+  }
+});
+
+// Bulk enrollment of multiple classes
+
+
+// Enroll in a single class
+app.post('/api/enroll', async (req, res) => {
+  try {
+    const {studentId, classId, isLoggedIn} = req.body;
+    
+    if (!studentId || !classId || !isLoggedIn) {
+      handleMissingParams(res, 'Missing one or more required params.');
+    } else if (isLoggedIn === true) {
+      const db = await getDBConnection();
+
+      let classDetails = await db.get(`
+        SELECT capacity, infinite_capacity
+        FROM Classes
+        WHERE class_id = ?;
+      `, classId);
+
+      if (!classDetails) {
+        handleDoesNotExist(res, 'Class does not exist.');
+      } else {
+        let enrollmentExists = await db.get(`
+          SELECT *
+          FROM PrevTransactions
+          WHERE student_id = ? AND class_id = ?;
+        `, studentId, classId);
+
+        if (enrollmentExists) {
+          let error = 409;
+          res.status(error).send('Student is already enrolled in this class.');
+        } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
+          res.type('text').send('Class is full.');
+        } else {
+          await db.run(`
+            INSERT INTO PrevTransactions (student_id, class_id, capacity, infinite_capacity)
+            VALUES (?, ?, ?, ?);
+          `, studentId, classId, classDetails.capacity - 1, classDetails.infinite_capacity);
+
+          if (!classDetails.infinite_capacity) {
+            await db.run(`
+              UPDATE Classes
+              SET capacity = ?
+              WHERE class_id = ?;
+            `, classDetails.capacity - 1, classId);
+          }
+
+          await db.close();
+
+          res.type('text').send(Math.random().toString(36));
+        }
+      }
+    }
+  } catch (error) {
+    handleServerError(res);
+  }
+});
+
+// Get Enrolled Classes
+app.post('/api/enroll/classes', async (req, res) => {
+  try {
+    const {studentId, isLoggedIn} = req.body;
+
+    if (!studentId || !isLoggedIn) {
+      handleMissingParams(res, 'Missing one or more required params.');
+    } else if (isLoggedIn === true) {
+      let db = await getDBConnection();
+
+      let enrolledClasses = await db.all(`SELECT Classes.class_id, 
+      class_name, major, instructor_name, capacity
+      FROM PrevTransactions
+      INNER JOIN Classes ON PrevTransactions.class_id = Classes.class_id
+      WHERE PrevTransactions.student_id = ?;`, studentId);
+  
+      await db.close();
+  
+      if (!enrolledClasses) {
+        handleDoesNotExist(res, 'ID does not exist.');
+      } else {
+        res.type('json');
+        res.send(enrolledClasses);
+      }
     }
   } catch (error) {
     handleServerError(res);

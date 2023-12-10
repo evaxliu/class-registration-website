@@ -1,3 +1,13 @@
+<!--
+ Name: Eva Liu and Samriddhi Sivakumar
+ Date: November 12th, 2023
+ Section: CSE 154 AB
+
+ This is the api doc to describe all endpoints
+ existing for the back end of our class
+ registration website.
+-->
+
 # Class Registration Website API Documentation
 This API holds endpoints which handle users for students, user
 information, classes and class information.
@@ -53,16 +63,16 @@ Student has successfully logged in.
 
 **Error Handling:**
 ```
-400 Bad Request: User has unstable internet connection.
+400 Bad Request: Missing one or more required parameters.
 ```
 ```
 401 Unauthorized: User has input incorrect email or password.
 ```
 
 ## List of Available Classes
-**Request Format:** GET with params
+**Request Format:** GET
 
-**Request Type:** GET
+**Request Type:** GET with params
 
 **Returned Data Format**: JSON
 
@@ -70,33 +80,30 @@ Student has successfully logged in.
 
 **Request:**
 ```
-GET /api/classes?status=available
+/api/classes
 ```
 
 **Response:**
 ``` json
 [
   {
-    "status": "available",
-    "name": "CSE 154: Web Programming",
-    "instructor": "Tal Wolman",
-    "spots": 5,
+    "class_id": 1,
+    "class_name": "CSE 154: Web Programming",
+    "instructor_name": "Tal Wolman",
+    "capacity": 5,
     "major": "Computer Science"
   },
   {
-    "status": "available",
-    "name": "CSE 403: Software Engineering",
-    "instructor": "Jane Smith",
-    "spots": 7,
+    "class_id": 2,
+    "class_name": "CSE 403: Software Engineering",
+    "instructor_name": "Jane Smith",
+    "capacity": 7,
     "major": "Computer Science"
   }
 ]
 ```
 
 **Error Handling:**
-```
-400 Bad Request: User has unstable internet connection.
-```
 ```
 404 Not Found: No classes found.
 ```
@@ -150,10 +157,10 @@ GET /api/search/classes?name="cse 154"
 ``` json
 [
   {
-    "status": "available",
-    "name": "CSE 154: Web Programming",
-    "instructor": "Tal Wolman",
-    "spots": 5,
+    "class_id": 1,
+    "class_name": "CSE 154: Web Programming",
+    "instructor_name": "Tal Wolman",
+    "capacity": 5,
     "major": "Computer Science"
   }
 ]
@@ -161,7 +168,7 @@ GET /api/search/classes?name="cse 154"
 
 **Error Handling:**
 ```
-400 Bad Request: Invalid search request.
+400 Bad Request: Missing one or more required parameters.
 ```
 ```
 404 Not Found: Class not found.
@@ -185,17 +192,17 @@ GET /api/search/classes?major="computer science"
 ``` json
 [
   {
-    "status": "available",
-    "name": "CSE 154: Web Programming",
-    "instructor": "Tal Wolman",
-    "spots": 5,
+    "class_id": 1,
+    "class_name": "CSE 154: Web Programming",
+    "instructor_name": "Tal Wolman",
+    "capacity": 5,
     "major": "Computer Science"
   },
   {
-    "status": "available",
-    "name": "CSE 403: Software Engineering",
-    "instructor": "Jane Smith",
-    "spots": 7,
+    "class_id": 2,
+    "class_name": "CSE 403: Software Engineering",
+    "instructor_name": "Jane Smith",
+    "capacity": 7,
     "major": "Computer Science"
   }
 ]

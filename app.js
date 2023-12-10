@@ -293,7 +293,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
  * @returns {sqlite3.Database} Result of a SQL query
  */
 async function checkClassExists(db, classId) {
-  return db.get(`
+  return await db.get(`
     SELECT capacity, infinite_capacity
     FROM Classes
     WHERE class_id = ?;
@@ -330,7 +330,7 @@ async function updateClasses(db, studentId, classId, classDetails) {
  * @returns {sqlite3.Database} - Results from a database query
  */
 async function checkClassEnrolled(db, studentId, classId) {
-  return db.get(`
+  return await db.get(`
     SELECT *
     FROM PrevTransactions
     WHERE student_id = ? AND class_id = ?;
@@ -342,6 +342,7 @@ async function checkClassEnrolled(db, studentId, classId) {
  * @param {sqlite3.Database} db - Database
  * @param {String} studentId - Query input
  * @param {String} classId - Query input
+ * @param {Response} res - Response
  */
 async function enrollSingleClass(db, studentId, classId, res) {
   let classDetails = await db.get(`
@@ -407,7 +408,6 @@ app.post('/api/classes/enroll', async (req, res) => {
       res.type('text').send("Student is not logged in");
     } else if (isLoggedIn === true) {
       const db = await getDBConnection();
-
       let classDetails = await checkClassExists(db, classId);
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');

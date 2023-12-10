@@ -95,33 +95,6 @@ const handleServerError = (res) => {
     .send("An error occurred on the server. Try again later.");
 };
 
-// Register student into the class registration website
-app.post('/api/register', async (req, res) => {
-  try {
-    const {email, password} = req.body;
-
-    if (!email || !password) {
-      handleMissingParams(res, 'Missing one or more required params.');
-    } else {
-      let db = await getDBConnection();
-
-      let userExists = await db.all('SELECT * FROM Students WHERE email = ?', email);
-
-      if (userExists.length > 0) {
-        handleConflictError(res, 'Student has already registered with the provided email.');
-      } else {
-        await db.run('INSERT INTO Students (email, passw) VALUES (?, ?)', email, password);
-
-        await db.close();
-
-        res.type("text").send("Student has successfully registered.");
-      }
-    }
-  } catch (error) {
-    handleServerError(res);
-  }
-});
-
 // Login student into the class registration website
 app.post('/api/login', async (req, res) => {
   try {
@@ -149,12 +122,12 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// List of available classes where the capacity is greater than 0
+// List of all classes
 app.get('/api/classes', async (res) => {
   try {
     let db = await getDBConnection();
 
-    let classes = await db.all('SELECT * FROM Classes WHERE capacity > 0');
+    let classes = await db.all('SELECT * FROM Classes');
 
     await db.close();
 

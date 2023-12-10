@@ -47,7 +47,8 @@ async function getDBConnection() {
  */
 const handleMissingParams = (res, message) => {
   const error = 400;
-  res.status(error).type("text").send(message);
+  res.status(error).type("text")
+    .send(message);
 };
 
 /**
@@ -57,7 +58,8 @@ const handleMissingParams = (res, message) => {
  */
 const handleUserNotLoggedIn = (res, message) => {
   const error = 401;
-  res.status(error).type("text").send(message);
+  res.status(error).type("text")
+    .send(message);
 };
 
 /**
@@ -67,7 +69,8 @@ const handleUserNotLoggedIn = (res, message) => {
  */
 const handleDoesNotExist = (res, message) => {
   const error = 404;
-  res.status(error).type("text").send(message);
+  res.status(error).type("text")
+    .send(message);
 };
 
 /**
@@ -77,7 +80,8 @@ const handleDoesNotExist = (res, message) => {
  */
 const handleConflictError = (res, message) => {
   const error = 409;
-  res.status(error).type("text").send(message);
+  res.status(error).type("text")
+    .send(message);
 };
 
 /**

@@ -477,8 +477,7 @@ app.post('/api/classes/classesTaken', async (req, res) => {
     } else {
       let db = await getDBConnection();
 
-      let classDetails = await db.get(
-        'SELECT class_id FROM Classes WHERE class_name = ?', className);
+      let classDetails = await db.get('SELECT class_id FROM Classes WHERE class_name = ?', className);
 
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');

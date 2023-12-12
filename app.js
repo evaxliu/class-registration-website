@@ -287,7 +287,7 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
  * @param {String} studentId - Query input
  * @param {String} classId - Query input
  * @param {sqlite3.Database} capacity - SQL query result
- * @param {sqlite3.Database} infinite_capacity - SQL query result
+ * @param {sqlite3.Database} infiniteCapacity - SQL query result
  */
 async function updateClasses(db, studentId, classId, capacity, infiniteCapacity) {
   await db.run(`
@@ -355,8 +355,13 @@ async function enrollMultiSingleClass(studentId, res) {
         res.type('text').send('Class is full.');
         return;
       }
-      await updateClasses(db, studentId, classId,
-        classDetails.capacity, classDetails.infinite_capacity);
+      await updateClasses(
+        db,
+        studentId,
+        classId,
+        classDetails.capacity,
+        classDetails.infinite_capacity
+      );
     }
     await db.close();
     const num = 36;
@@ -401,8 +406,13 @@ async function enrollSingleClass(studentId, className, res) {
     } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
       res.type('text').send('Class is full.');
     } else {
-      await updateClasses(db, studentId, classId,
-        classDetails.capacity, classDetails.infinite_capacity);
+      await updateClasses(
+        db,
+        studentId,
+        classId,
+        classDetails.capacity,
+        classDetails.infinite_capacity
+      );
       const num = 36;
       res.type('text').send(Math.random().toString(num));
     }

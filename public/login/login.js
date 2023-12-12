@@ -19,9 +19,10 @@
    * after the page loads.
    */
   function init() {
-    let pIncorrect = document.getElementById("incorrect");
+    let pIncorrect = id("incorrect");
+    let loginBtn = id("login-btn");
 
-    pIncorrect.addEventListener("click", checkUserPass);
+    loginBtn.addEventListener("click", checkUserPass);
   }
 
   /**
@@ -31,15 +32,45 @@
    * the sign in button.
    */
   function checkUserPass() {
-    // const form = document.getElementById("form");
+    const form = id("form");
+    const username = form.user.value;
+    const password = form.pass.value;
 
-    // const username = form.user.value;
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: username, password: password }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          let pIncorrect = document.getElementById("incorrect");
+          pIncorrect.style.display = "block";
+          pIncorrect.classList.add("error");
+        }
 
-    // const password = form.pass.value;
+        return response.text();
+      })
+      .then(responseText => {
+        console.log(responseText);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:' + error);
+      });
 
     /**
      * check if username and password is incorrect
      * if true, show pIncorrect using css class
      */
+  }
+
+  /**
+   * Returns the DOM element with the specified ID.
+   * @param { string } id - The ID of the element to retrieve.
+   * @returns { Element } The DOM element with the specified ID
+   */
+  function id(id) {
+    return document.getElementById(id);
   }
 })();

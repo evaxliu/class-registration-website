@@ -72,3 +72,7 @@ p {
 .password-hidden {
   visibility: hidden;
 }
+
+.error {
+  visibility: visible;
+}

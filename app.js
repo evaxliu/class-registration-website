@@ -111,8 +111,7 @@ app.post('/api/login', async (req, res) => {
       await db.close();
 
       if (findStudent.length === 0) {
-        const error = 401;
-        res.status(error).send('User has input incorrect email or password.');
+        res.status(401).send('User has input incorrect email or password.');
       } else {
         res.type("text").send("Student has successfully logged in.");
       }
@@ -154,7 +153,7 @@ app.get('/api/classes/search', async (req, res) => {
 
       let classes = await db.all(`
         SELECT *
-        FROM Classes WHERE class_name 
+        FROM Classes WHERE class_name
         LIKE ? OR major LIKE ? OR instructor_name LIKE ?
       `, searchQuery, searchQuery, searchQuery);
 
@@ -439,7 +438,7 @@ app.post('/api/classes/enrolled', async (req, res) => {
       let db = await getDBConnection();
 
       let enrolledClasses = await db.all(`
-        SELECT Classes.class_id, 
+        SELECT Classes.class_id,
         class_name, major, instructor_name, capacity
         FROM PrevTransactions
         INNER JOIN Classes ON PrevTransactions.class_id = Classes.class_id

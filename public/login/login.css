@@ -1,78 +1,61 @@
 /*
   Name: Eva Liu and Samriddhi Sivakumar
-  Date: November 4th, 2023
-  Section: CSE 154 AB Donovan Jordan Kong
+  Date: December 12th, 2023
+  Section: CSE 154 AB, CSE 154 AA
 
-  Hello, this is a CSS page which styles login.html.
-  This CSS page will style the header, text input
-  for username and password and the login
-  button.
+  This is an CSS page which styles login.html.
+  This CSS page will style the header, and list
+  of classes buttons.
 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
 
 h1 {
   text-align: center;
-  text-transform: capitalize;
-  color: rgb(172, 149, 192);
-}
-
-/* source of image: https://unsplash.com/photos/blue-to-purple-gradient-eICUFSeirc0 */
-body {
-  background-image: url("../../img/luke-chesser-eICUFSeirc0-unsplash.png");
-  background-attachment: fixed;
-  background-size: cover;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 20px;
 }
 
 section {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-form {
-  padding: 15px;
-}
-
-form, button {
-  color: white;
+label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 input {
-  margin: 10px;
-  padding: 5px;
-  border-top: transparent;
-  border-left: transparent;
-  border-right: transparent;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
-a {
-  background-color: rgb(172, 149, 192);
-  border: transparent;
+a#login-btn {
+  display: block;
+  background-color: #4caf50;
+  color: #fff;
+  text-align: center;
   padding: 10px;
-}
-
-a:hover {
+  text-decoration: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-p {
-  color: red;
-  visibility: hidden;
+a#login-btn:hover {
+  background-color: #45a049;
 }
 
-.password-visible {
-  visibility: visible;
-}
-
-.password-hidden {
-  visibility: hidden;
-}
-
-.error {
-  visibility: visible;
+#incorrect {
+  display: none;
+  color: #ff0000;
+  margin-top: 10px;
 }

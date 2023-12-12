@@ -1,13 +1,13 @@
 /*
  * Name: Eva Liu and Samriddhi Sivakumar
- * Date: November 4th, 2023
- * Section: CSE 154 AB
+ * Date: December 12th, 2023
+ * Section: CSE 154 AB, CSE 154 AA
  *
- * This is the JS to implement the UI experience for
- * the previous class seen for the class
- * registration website.
+ * This JavaScript file is responsible for handling the previous transactions UI
+ * experience on the class registration website. It initializes event listeners,
+ * displays class descriptions upon button clicks, and allows navigation
+ * to class details or other relevant information.
  */
-
 "use strict";
 
 (function() {
@@ -30,9 +30,46 @@
    * in a list.
    */
   function showClassDescription() {
-    /**
-     * Show class description after clicking
-     * on a class button
-     */
+    // Assume you have an array of classes
+    const computerScienceClasses = ["CS101", "CS102", "CS103"];
+    const eceClasses = ["ECE201", "ECE202", "ECE203"];
+
+    // Get the sections
+    const csSection = document.getElementById("computer-science-section");
+    const eceSection = document.getElementById("ece-section");
+
+    // Populate Computer Science classes
+    computerScienceClasses.forEach(className => {
+      const classButton = createClassButton(className);
+      csSection.appendChild(classButton);
+    });
+
+    // Populate ECE classes
+    eceClasses.forEach(className => {
+      const classButton = createClassButton(className);
+      eceSection.appendChild(classButton);
+    });
+  }
+
+  /**
+   * Creates a button for a class.
+   * @param {string} className - The name of the class.
+   * @returns {HTMLButtonElement} - The created class button element.
+   */
+  function createClassButton(className) {
+    const classButton = document.createElement("button");
+    classButton.textContent = className;
+    classButton.addEventListener("click", () => handleClassClick(className));
+    return classButton;
+  }
+
+  /**
+   * Handles the click event for a class button.
+   * @param {string} className - The name of the clicked class.
+   */
+  function handleClassClick(className) {
+    // Add logic to show class description or navigate to class details page
+    console.log(`Class clicked: ${className}`);
+    // You can navigate to a class details page or show more information here
   }
 })();

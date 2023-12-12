@@ -1,28 +1,32 @@
 <!DOCTYPE html>
+<!--
+  Name: Eva Liu and Samriddhi Sivakumar
+  Date: December 12th, 2023
+  Section: CSE 154 AB, CSE 154 AA
+
+  This HTML page serves as the Enrollment Confirmation page, displaying details
+  about the enrolled class. It includes a header with the title "Enrollment Confirmation,"
+  a main section where content will be dynamically added by enroll.js, and a footer
+  containing a "Go Back" button for navigation.
+-->
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Enroll in Class</title>
-    <link rel="stylesheet" href="enroll.css">
-    <script src="public/index.js"></script>
-  </head>
-  <body>
-    <header>
-      <h1>Enroll in Class</h1>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <title>Enrollment Confirmation</title>
+  <link rel="stylesheet" href="enroll.css">
+  <script defer src="enroll.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Enrollment Confirmation</h1>
+  </header>
 
-    <hr>
+  <main id="enrollment-details">
+    <!-- Content will be dynamically added by enroll.js -->
+  </main>
 
-    <main>
-      <div class="class-details">
-        <h2>CSE 154</h2>
-        <p>Professor: </p>
-        <!-- Other details -->
-      </div>
-
-      <button onclick="enrollInClass()">Enroll</button>
-    </main>
-
-    <footer></footer>
-  </body>
+  <footer>
+    <button id="go-back-btn">Go Back</button>
+  </footer>
+</body>
 </html>

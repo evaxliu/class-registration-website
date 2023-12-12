@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+  Name: Eva Liu and Samriddhi Sivakumar
+  Date: December 12th, 2023
+  Section: CSE 154 AB, CSE 154 AA
+
+  This HTML page serves as the interface for displaying a list of classes.
+  It includes a search and filter feature allowing users to find classes based on criteria.
+  The page is styled using the "classes.css" stylesheet, and the functionality is implemented
+  through the "classes.js" script.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>List of Classes</title>
+    <link rel="stylesheet" href="classes.css">
+    <script src="classes.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>List of Classes</h1>
+      <!-- <a href="/login/login.html" class="sign-in-btn">Login</a> -->
+    </header>
+
+    <hr>
+
+    <main>
+      <form id="search-feature">
+        <input type="text" name="search" placeholder="Search" id="search">
+
+        <select name="major" id="major-dropdown">
+          <option value="">Select Major</option>
+        </select>
+        <button type="button" id="search-feature-btn">Filter</button>
+
+        <section id="tiles"></section>
+      </form>
+    </main>
+
+    <footer></footer>
+  </body>
+</html>

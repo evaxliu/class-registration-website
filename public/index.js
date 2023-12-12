@@ -1,12 +1,13 @@
 /*
  * Name: Eva Liu and Samriddhi Sivakumar
- * Date: November 4th, 2023
- * Section: CSE 154 AB
+ * Date: December 12th, 2023
+ * Section: CSE 154 AB, CSE 154 AA
  *
- * This is the JS to implement the UI experience for
- * the class registration website.
+ * This JavaScript file implements the login functionality for the class registration website.
+ * It handles user authentication by sending a POST request to the '/api/login' endpoint with
+ * the entered email and password. Upon successful login, a success message is logged; otherwise,
+ * an error message is logged. The 'init' function adds a click event listener to the login button.
  */
-
 "use strict";
 
 (function() {

@@ -1,12 +1,13 @@
 /*
  * Name: Eva Liu and Samriddhi Sivakumar
- * Date: November 4th, 2023
- * Section: CSE 154 AB
+ * Date: December 12th, 2023
+ * Section: CSE 154 AB, CSE 154 AA
  *
- * This is the JS to implement the UI experience for
- * the login for the class registration website.
+ * This JavaScript file implements the client-side functionality for the login page
+ * of the class registration website. It handles element retrieval, event listener
+ * initialization, and the logic for checking the validity of the entered username
+ * and password. If the login is successful, it redirects the user to the classes page.
  */
-
 "use strict";
 
 (function() {
@@ -48,6 +49,8 @@
           let pIncorrect = document.getElementById("incorrect");
           pIncorrect.style.display = "block";
           pIncorrect.classList.add("error");
+        } else {
+          window.location.href = "/classes/classes.html";
         }
 
         return response.text();

@@ -298,21 +298,6 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
 });
 
 /**
- * Helper function checks if the class exists in the database
- * @param {sqlite3.Database} db - Database
- * @param {String} classId - Query input
- * @returns {sqlite3.Database} Result of a SQL query
- */
-async function checkClassExists(db, classId) {
-  let checkClass = await db.get(`
-  SELECT capacity, infinite_capacity
-  FROM Classes
-  WHERE class_id = ?;
-`, classId);
-  return checkClass;
-}
-
-/**
  * Helper function inserts enrolled class into student's history and update class capacity
  * @param {sqlite3.Database} db - Database
  * @param {String} studentId - Query input
@@ -508,20 +493,20 @@ app.post('/api/classes/classesTaken', async (req, res) => {
     } else {
       let db = await getDBConnection();
 
-      let classDetails = await db.all('SELECT * FROM Classes WHERE class_name = ?', className);
+      let classDetails = db.all('SELECT * FROM Classes WHERE class_name = ?', className);
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');
       } else {
         let classId = classDetails[0].class_id;
-        let hasTakenClass = await db.all(`SELECT * FROM PrevCompletedClasses
+        let hasTakenClass = db.all(`SELECT * FROM PrevCompletedClasses
         WHERE student_id = ? AND class_id = ?`, studentId, classId);
 
         await db.close();
 
-        if (hasTakenClass) {
-          res.type('text').send('Student meets prereq requirements.');
+        if (!hasTakenClass) {
+          handleDoesNotExist(res, 'Student does not meet prereq requirements.');
         } else {
-          handleDoesNotExist(res, 'Class does not exist.');
+          res.type('text').send('Student meets prereq requirements.');
         }
       }
     }

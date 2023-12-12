@@ -478,15 +478,13 @@ app.post('/api/classes/classesTaken', async (req, res) => {
       let db = await getDBConnection();
 
       let classDetails = await db.get(
-        'SELECT class_id FROM Classes WHERE class_name = ?',
-        className
-      );
+        'SELECT class_id FROM Classes WHERE class_name = ?', className);
 
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');
       } else {
         let classId = classDetails.class_id;
-        
+
         let hasTakenClass = await db.get(`SELECT * FROM PrevCompletedClasses
         WHERE student_id = ? AND class_id = ?`, studentId, classId);
 

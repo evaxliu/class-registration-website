@@ -1,5 +1,5 @@
 CREATE TABLE Students (
-    student_id INT PRIMARY KEY,
+    student_id INTEGER PRIMARY KEY,
     first_name VARCHAR(40),
     last_name VARCHAR(40),
     email VARCHAR(100) UNIQUE,
@@ -20,7 +20,7 @@ CREATE TABLE Classes (
 );
 
 CREATE TABLE PrevTransactions (
-    prev_transactions_id INT PRIMARY KEY,
+    prev_transactions_id INTEGER PRIMARY KEY,
     student_id INT,
     class_id INT,
     capacity INT,
@@ -30,7 +30,7 @@ CREATE TABLE PrevTransactions (
 );
 
 CREATE TABLE PrevCompletedClasses (
-    prev_completed_id INT PRIMARY KEY,
+    prev_completed_id INTEGER PRIMARY KEY,
     student_id INT,
     class_id INT,
     capacity INT,
@@ -40,7 +40,7 @@ CREATE TABLE PrevCompletedClasses (
 );
 
 CREATE TABLE BulkEnrollments (
-    bulk_enrollment_id INT PRIMARY KEY,
+    bulk_enrollment_id INTEGER PRIMARY KEY,
     student_id INT,
     class_id INT,
     capacity INT,

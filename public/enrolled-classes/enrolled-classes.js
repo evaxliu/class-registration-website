@@ -14,8 +14,10 @@
 (function() {
   window.addEventListener("load", init);
 
-  // Initializes on page load and fetches the enrolled classes
-  async function init() {
+  /**
+   * Initializes on page load and fetches the enrolled classes
+   */
+  function init() {
     fetchEnrolledClasses();
 
     let goBackBtn = document.querySelector("#go-back-btn");

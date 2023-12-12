@@ -17,7 +17,9 @@
 (function() {
   window.addEventListener("load", init);
 
-  // Initalizes on page load and fetches the enrollment details
+  /**
+   * Initalizes on page load and fetches the enrollment details
+   */
   function init() {
     // Fetch and display the enrollment details
     fetchEnrollmentDetails();
@@ -75,6 +77,7 @@
 
   /**
    * Handles the "Check Permissions" button click event.
+   * @param {String} classId - Query input
    */
   async function checkPermissions(classId) {
     try {

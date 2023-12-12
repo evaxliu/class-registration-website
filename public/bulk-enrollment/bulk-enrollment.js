@@ -13,7 +13,9 @@
 (function() {
   window.addEventListener("load", init);
 
-  // Initializes the poad load and handles the buttons when clicked
+  /**
+   * Initializes the poad load and handles the buttons when clicked
+   */
   function init() {
     fetchAddedClasses();
 
@@ -106,8 +108,6 @@
         },
         body: JSON.stringify({studentId: 123, isLoggedIn: true})
       });
-
-      const enrollmentResult = await response.text();
     } catch (error) {
       console.error("Error enrolling in all classes: " + error);
     }

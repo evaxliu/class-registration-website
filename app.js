@@ -568,7 +568,10 @@ async function checkPrerequisites(classId) {
   }
 }
 
-// Function to check if the student is eligible to enroll
+/**
+ * Helper function to check if the student is eligible to enroll
+ * @param {String} classId - Query input
+ */
 async function checkEnrollmentEligibility(classId) {
   try {
     const remainingCapacity = await getClassRemainingCapacity(classId);
@@ -587,7 +590,7 @@ async function checkEnrollmentEligibility(classId) {
 // Check permissions to enroll for a class
 app.post('/api/classes/permissions', (req, res) => {
   try {
-    const { classId } = req.body;
+    const {classId} = req.body;
 
     if (!classId) {
       handleMissingParams(res, 'Missing class ID.');

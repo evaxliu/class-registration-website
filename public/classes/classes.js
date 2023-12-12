@@ -9,10 +9,12 @@
  */
 "use strict";
 
-(function () {
+(function() {
   window.addEventListener("load", init);
 
-  // Initializes on page laod and fetches the classes as well as the majors
+  /**
+   * Initializes on page laod and fetches the classes as well as the majors
+   */
   async function init() {
     // Fetch and display the list of classes
     fetchClasses();
@@ -155,6 +157,9 @@
     window.location.href = "/selected-class/selected-class.html?classId=" + classId;
   }
 
+  /**
+   * Handles the filter feature
+   */
   async function handleFilter() {
     const tileContainer = id("tiles");
     tileContainer.innerHTML = "";

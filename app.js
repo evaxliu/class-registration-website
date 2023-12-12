@@ -289,14 +289,14 @@ app.post('/api/bulkEnrollment/addClass', async (req, res) => {
  * @param {sqlite3.Database} capacity - SQL query result
  * @param {sqlite3.Database} infinite_capacity - SQL query result
  */
-async function updateClasses(db, studentId, classId, capacity, infinite_capacity) {
-  await db.run(
-    'INSERT INTO PrevTransactions (student_id, class_id, capacity, infinite_capacity) VALUES (?, ?, ?, ?)',
-    [studentId, classId, capacity - 1, infinite_capacity]
-  );
+async function updateClasses(db, studentId, classId, capacity, infiniteCapacity) {
+  await db.run(`
+    INSERT INTO PrevTransactions (student_id, class_id,
+      capacity, infinite_capacity) VALUES (?, ?, ?, ?)
+      `, [studentId, classId, capacity - 1, infiniteCapacity]);
   await db.run('UPDATE Classes SET capacity = ? WHERE class_id = ?', [
     capacity - 1,
-    classId,
+    classId
   ]);
 }
 
@@ -328,7 +328,7 @@ async function checkBulk(db, studentId) {
     INNER JOIN BulkEnrollments ON Classes.class_id = BulkEnrollments.class_id
     WHERE BulkEnrollments.student_id = ?
   `, studentId);
-  return bulkClasses
+  return bulkClasses;
 }
 
 /**
@@ -354,9 +354,9 @@ async function enrollMultiSingleClass(studentId, res) {
       } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
         res.type('text').send('Class is full.');
         return;
-      } else {
-        await updateClasses(db, studentId, classId, classDetails.capacity, classDetails.infinite_capacity);
       }
+      await updateClasses(db, studentId, classId,
+        classDetails.capacity, classDetails.infinite_capacity);
     }
     await db.close();
     const num = 36;
@@ -373,7 +373,7 @@ app.post('/api/bulkEnrollment', async (req, res) => {
     } else if (!isLoggedIn) {
       handleUserNotLoggedIn(res, "Student is not logged in");
     } else {
-      await enrollMultiSingleClass(studentId, res)
+      await enrollMultiSingleClass(studentId, res);
     }
   } catch (error) {
     handleServerError(res);
@@ -401,7 +401,8 @@ async function enrollSingleClass(studentId, className, res) {
     } else if (!classDetails.infinite_capacity && classDetails.capacity <= 0) {
       res.type('text').send('Class is full.');
     } else {
-      await updateClasses(db, studentId, classId, classDetails.capacity, classDetails.infinite_capacity);
+      await updateClasses(db, studentId, classId,
+        classDetails.capacity, classDetails.infinite_capacity);
       const num = 36;
       res.type('text').send(Math.random().toString(num));
     }

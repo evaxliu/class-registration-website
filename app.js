@@ -477,20 +477,25 @@ app.post('/api/classes/classesTaken', async (req, res) => {
     } else {
       let db = await getDBConnection();
 
-      let classDetails = await db.all('SELECT * FROM Classes WHERE class_name = ?', className);
+      let classDetails = await db.get(
+        'SELECT class_id FROM Classes WHERE class_name = ?',
+        className
+      );
+
       if (!classDetails) {
         handleDoesNotExist(res, 'Class does not exist.');
       } else {
-        let classId = classDetails[0].class_id;
-        let hasTakenClass = await db.all(`SELECT * FROM PrevCompletedClasses
+        let classId = classDetails.class_id;
+        
+        let hasTakenClass = await db.get(`SELECT * FROM PrevCompletedClasses
         WHERE student_id = ? AND class_id = ?`, studentId, classId);
 
         await db.close();
 
-        if (hasTakenClass) {
-          res.type('text').send('Student meets prereq requirements.');
+        if (!hasTakenClass) {
+          handleDoesNotExist(res, 'Student does not meet prereq requirements.');
         } else {
-          handleDoesNotExist(res, 'Class does not exist.');
+          res.type('text').send('Student meets prereq requirements.');
         }
       }
     }

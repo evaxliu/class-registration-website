@@ -22,7 +22,9 @@
     window.location.href = "/bulk-enrollment/bulk-enrollment.html?studentId=1";
   });
 
-  // Fetch and display the details of the selected class
+  /**
+   * Fetch and display the details of the selected class
+   */
   async function init() {
     await fetchAndDisplayClassDetails();
   }

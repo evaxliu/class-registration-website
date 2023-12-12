@@ -101,7 +101,7 @@
   async function handleEnrollAll() {
     try {
       // Make a fetch request to enroll in all added classes
-      const response = await fetch("/api/bulkEnrollment", {
+      await fetch("/api/bulkEnrollment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -128,7 +128,7 @@
         body: JSON.stringify({studentId: 123, classId})
       });
 
-      const enrollmentResult = await response.text();
+      await response.text();
     } catch (error) {
       console.error("Error enrolling in the class: " + error);
     }

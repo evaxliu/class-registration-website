@@ -184,6 +184,31 @@
     }
   }
 
+  async function handleSearch() {
+    const tileContainer = id("tiles");
+    tileContainer.innerHTML = "";
+
+    const search = id("search");
+    const input = search.value;
+
+    if (input) {
+      try {
+        const response = await fetch(`/api/classes/search?searchQuery=${input}`);
+        const filteredClasses = await response.json();
+
+        if (response.ok) {
+          displayClasses(filteredClasses);
+        } else {
+          console.error("Failed to fetch filtered classes:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching filtered classes: " + error);
+      }
+    } else {
+      fetchClasses();
+    }
+  }
+
   /**
    * Returns the DOM element with the specified ID.
    * @param {string} id - The ID of the element to retrieve.

@@ -10,11 +10,11 @@
  */
 "use strict";
 
-(function () {
+(function() {
   window.addEventListener("load", init);
 
-  async function init() {
-    // Fetch and display the list of added classes
+  // Initializes the poad load and handles the buttons when clicked
+  function init() {
     fetchAddedClasses();
 
     let enrollAllBtn = document.querySelector("#enroll-all-btn");
@@ -102,15 +102,12 @@
       const response = await fetch("/api/bulkEnrollment", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ studentId: 123, isLoggedIn: true }), // Replace 123 with the actual student ID
+        body: JSON.stringify({studentId: 123, isLoggedIn: true})
       });
 
       const enrollmentResult = await response.text();
-      console.log("Enrollment Result:", enrollmentResult);
-
-      // After enrolling in all classes, you might want to update the UI or display a success message
     } catch (error) {
       console.error("Error enrolling in all classes: " + error);
     }
@@ -126,15 +123,12 @@
       const response = await fetch("/api/enroll", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ studentId: 123, classId }), // Replace 123 with the actual student ID
+        body: JSON.stringify({studentId: 123, classId})
       });
 
       const enrollmentResult = await response.text();
-      console.log("Enrollment Result:", enrollmentResult);
-
-      // After enrolling in the class, you might want to update the UI or display a success message
     } catch (error) {
       console.error("Error enrolling in the class: " + error);
     }

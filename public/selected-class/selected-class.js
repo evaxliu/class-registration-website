@@ -11,7 +11,7 @@
  */
 "use strict";
 
-(function () {
+(function() {
   window.addEventListener("load", init);
 
   const goBackBtn = document.getElementById("go-back-btn");
@@ -22,8 +22,8 @@
     window.location.href = "/bulk-enrollment/bulk-enrollment.html?studentId=1";
   });
 
+  // Fetch and display the details of the selected class
   async function init() {
-    // Fetch and display the details of the selected class
     await fetchAndDisplayClassDetails();
   }
 
@@ -82,7 +82,7 @@
 
     const prerequisites = document.createElement("p");
 
-    if (classDetails.pre_req != "") {
+    if (classDetails.pre_req !== "") {
       prerequisites.textContent = "Prerequisites: " + classDetails.pre_req;
     } else {
       prerequisites.textContent = "Prerequisites: N/A";

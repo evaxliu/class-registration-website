@@ -515,6 +515,10 @@ app.post('/api/classes/classesTaken', async (req, res) => {
   }
 });
 
+/**
+ * Helper function to get the class prerequisites
+ * @param {String} classId - Query input
+ */
 async function getClassPrerequisites(classId) {
   const db = await getDBConnection();
   const prerequisites = await db.get(`
@@ -526,6 +530,10 @@ async function getClassPrerequisites(classId) {
   return prerequisites ? prerequisites.pre_req : null;
 }
 
+/**
+ * Helper function to get the remaining capacity
+ * @param {String} classId - Query input
+ */
 async function getClassRemainingCapacity(classId) {
   const db = await getDBConnection();
   const classDetails = await db.get(`
@@ -536,12 +544,15 @@ async function getClassRemainingCapacity(classId) {
   await db.close();
   if (classDetails.infinite_capacity) {
     return Infinity;
-  } else {
-    return classDetails.capacity;
   }
+
+  return classDetails.capacity;
 }
 
-// Function to check if the student meets prerequisites
+/**
+ * Helper function to check if the student mets the prerequisities
+ * @param {String} classId - Query input
+ */
 async function checkPrerequisites(classId) {
   try {
     const prerequisites = await getClassPrerequisites(classId);
@@ -550,7 +561,7 @@ async function checkPrerequisites(classId) {
       return true;
     }
 
-    return prerequisites.split(',').every(prereq);
+    return prerequisites.split(',');
   } catch (error) {
     console.error("Error checking prerequisites:", error);
     return false;
@@ -566,7 +577,6 @@ async function checkEnrollmentEligibility(classId) {
       return false;
     }
 
-
     return true;
   } catch (error) {
     console.error("Error checking enrollment eligibility:", error);
@@ -574,7 +584,8 @@ async function checkEnrollmentEligibility(classId) {
   }
 }
 
-app.post('/api/classes/permissions', async (req, res) => {
+// Check permissions to enroll for a class
+app.post('/api/classes/permissions', (req, res) => {
   try {
     const { classId } = req.body;
 
@@ -584,18 +595,18 @@ app.post('/api/classes/permissions', async (req, res) => {
       const meetsPrerequisites = checkPrerequisites(classId);
 
       if (!meetsPrerequisites) {
-        res.status(403).json({ error: 'Student does not meet prerequisites.' });
+        res.status(403).json({error: 'Student does not meet prerequisites.'});
         return;
       }
 
       const isEligible = checkEnrollmentEligibility(classId);
 
       if (!isEligible) {
-        res.status(403).json({ error: 'Student is not eligible to enroll in this class.' });
+        res.status(403).json({error: 'Student is not eligible to enroll in this class.'});
         return;
       }
 
-      res.status(200).json({ message: 'Student has permission to enroll in this class.' });
+      res.status(200).json({message: 'Student has permission to enroll in this class.'});
     }
   } catch (error) {
     handleServerError(res);

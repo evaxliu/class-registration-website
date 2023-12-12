@@ -13,13 +13,14 @@
 (function() {
   window.addEventListener("load", init);
 
+  // Initializes on page laod and sets up an event listener when the log-in button is clicked
   function init() {
     let loginBtn = id("login-btn");
     loginBtn.addEventListener("click", loginUser);
   }
 
+  // Function to login in the user
   async function loginUser() {
-    console.log("CAME HERE");
     const emailInput = id("email").value;
     const passwordInput = id("password").value;
 
@@ -34,7 +35,6 @@
 
       if (response.ok) {
         const successMessage = await response.text();
-        console.log(successMessage);
       } else {
         const errorMessage = await response.text();
         console.error(errorMessage);

@@ -14,10 +14,11 @@
  */
 "use strict";
 
-(function () {
+(function() {
   window.addEventListener("load", init);
 
-  async function init() {
+  // Initalizes on page load and fetches the enrollment details
+  function init() {
     // Fetch and display the enrollment details
     fetchEnrollmentDetails();
 
@@ -72,7 +73,7 @@
     main.appendChild(classDetailsSection);
   }
 
-    /**
+  /**
    * Handles the "Check Permissions" button click event.
    */
   async function checkPermissions(classId) {
@@ -80,9 +81,9 @@
       const response = await fetch("/api/classes/permissions", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ classId: classId }),
+        body: JSON.stringify({classId: classId})
       });
 
       const result = await response.json();
@@ -120,7 +121,7 @@
 
     enrolledClassBtn.addEventListener("click", () => {
       window.location.href = "/enrolled-classes/enrolled-classes.html";
-    })
+    });
   }
 
   /**

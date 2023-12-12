@@ -12,6 +12,7 @@
 (function () {
   window.addEventListener("load", init);
 
+  // Initializes on page laod and fetches the classes as well as the majors
   async function init() {
     // Fetch and display the list of classes
     fetchClasses();
@@ -40,6 +41,9 @@
     }
   }
 
+  /**
+   * Fetches the list of majors from the server and displays them on the page.
+   */
   async function fetchMajors() {
     try {
       const response = await fetch("/api/majors");
@@ -56,6 +60,10 @@
     }
   }
 
+  /**
+   * Populates the majors in a dropdown manner and displays them on the page.
+   * @param {Array} majors - An array of major objects.
+   */
   function populateMajorsDropdown(majors) {
     const dropdown = document.getElementById("major-dropdown");
 
@@ -170,14 +178,6 @@
       fetchClasses();
     }
   }
-
-  /**
-   * Displays details of a selected class.
-   * @param {string} classId - The ID of the selected class.
-   */
-  // function showClassDetails(classId) {
-  //   console.log("Class details clicked: " + classId);
-  // }
 
   /**
    * Returns the DOM element with the specified ID.

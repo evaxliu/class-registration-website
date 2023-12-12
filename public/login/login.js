@@ -20,7 +20,6 @@
    * after the page loads.
    */
   function init() {
-    let pIncorrect = id("incorrect");
     let loginBtn = id("login-btn");
 
     loginBtn.addEventListener("click", checkUserPass);
@@ -40,9 +39,9 @@
     fetch('/api/login', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: username, password: password }),
+      body: JSON.stringify({email: username, password: password})
     })
       .then(response => {
         if (!response.ok) {
@@ -54,9 +53,6 @@
         }
 
         return response.text();
-      })
-      .then(responseText => {
-        console.log(responseText);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:' + error);

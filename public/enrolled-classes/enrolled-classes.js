@@ -11,9 +11,10 @@
  */
 "use strict";
 
-(function () {
+(function() {
   window.addEventListener("load", init);
 
+  // Initializes on page load and fetches the enrolled classes
   async function init() {
     fetchEnrolledClasses();
 
@@ -29,13 +30,12 @@
       const response = await fetch("/api/classes/enrolled", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ studentId: 1, isLoggedIn: true }),
+        body: JSON.stringify({studentId: 1, isLoggedIn: true})
       });
 
       const enrolledClasses = await response.json();
-      console.log(enrolledClasses);
       displayEnrolledClasses(enrolledClasses);
     } catch (error) {
       console.error("Error fetching enrolled classes: " + error);
@@ -85,7 +85,7 @@
       const enrolledClassesList = document.getElementById("enrolled-classes-list");
 
       enrolledClassesList.innerHTML = "";
-    })
+    });
 
     return classSection;
   }

@@ -68,8 +68,6 @@
    * @param {string} className - The name of the clicked class.
    */
   function handleClassClick(className) {
-    // Add logic to show class description or navigate to class details page
-    console.log(`Class clicked: ${className}`);
-    // You can navigate to a class details page or show more information here
+    console.error(`Class clicked: ${className}`);
   }
 })();

@@ -23,6 +23,9 @@
 
     let filterButton = document.querySelector("#search-feature-btn");
     filterButton.addEventListener("click", handleFilter);
+
+    let searchBtn = document.querySelector("#search-btn");
+    searchBtn.addEventListener("click", handleSearch);
   }
 
   /**
@@ -184,6 +187,9 @@
     }
   }
 
+  /**
+   * Function for handling search
+   */
   async function handleSearch() {
     const tileContainer = id("tiles");
     tileContainer.innerHTML = "";

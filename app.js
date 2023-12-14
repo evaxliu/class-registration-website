@@ -597,19 +597,23 @@ app.post('/api/classes/permissions', (req, res) => {
     } else {
       const meetsPrerequisites = checkPrerequisites(classId);
 
+      const number = 403;
+
       if (!meetsPrerequisites) {
-        res.status(403).json({error: 'Student does not meet prerequisites.'});
+        res.status(number).json({error: 'Student does not meet prerequisites.'});
         return;
       }
 
       const isEligible = checkEnrollmentEligibility(classId);
 
       if (!isEligible) {
-        res.status(403).json({error: 'Student is not eligible to enroll in this class.'});
+        res.status(number).json({error: 'Student is not eligible to enroll in this class.'});
         return;
       }
 
-      res.status(200).json({message: 'Student has permission to enroll in this class.'});
+      let number2 = 200;
+
+      res.status(number2).json({message: 'Student has permission to enroll in this class.'});
     }
   } catch (error) {
     handleServerError(res);
